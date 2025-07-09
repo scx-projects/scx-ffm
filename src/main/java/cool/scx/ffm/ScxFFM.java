@@ -23,5 +23,5 @@ public final class ScxFFM {
     public static <T> T ffmProxy(Path path, Class<T> clazz) {
         return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new FFMProxy(libraryLookup(path, global())));
     }
-    
+
 }

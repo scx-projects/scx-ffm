@@ -1,20 +1,19 @@
-package cool.scx.ffm.test.platform.win32.helper;
+package cool.scx.ffm.test;
 
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
 import java.util.ArrayList;
-import java.util.List;
 
 import static cool.scx.ffm.test.platform.win32.User32.USER32;
 import static java.lang.foreign.ValueLayout.JAVA_LONG;
 
-/// 简化操作 Window
-///
-/// @author scx567888
-/// @version 0.0.1
-public final class WindowHelper {
+public class WindowTest {
 
-    public static List<WindowInfo> FindAllWindow() throws Throwable {
+    public static void main(String[] args) throws Throwable {
+        test1();
+    }
+
+    public static void test1() throws Throwable {
         var list = new ArrayList<WindowInfo>();
         USER32.EnumWindows((hWnd, _) -> {
             //只要顶级窗口
@@ -28,7 +27,7 @@ public final class WindowHelper {
             return true;
         }, 0);
 
-        return list;
+        System.out.println(list);
     }
 
     public static String getWindowTitle(MemorySegment hWnd) {

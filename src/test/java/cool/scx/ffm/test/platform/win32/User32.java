@@ -13,7 +13,7 @@ import java.lang.foreign.MemorySegment;
 /// @version 0.0.1
 public interface User32 {
 
-    User32 USER32 = ScxFFM.ffmProxy("user32",User32.class);
+    User32 USER32 = ScxFFM.ffmProxy("user32", User32.class);
 
     // https://learn.microsoft.com/zh-cn/windows/win32/api/winuser/nf-winuser-messageboxa
     int MessageBoxA(MemorySegment hWnd, String lpText, String lpCaption, int uType);

@@ -6,15 +6,11 @@ import java.lang.foreign.SymbolLookup;
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
 import static cool.scx.ffm.FFMHelper.*;
-import static java.lang.foreign.Arena.global;
 import static java.lang.foreign.Linker.nativeLinker;
-import static java.lang.foreign.SymbolLookup.libraryLookup;
 
 /// FFMProxy
 ///
@@ -25,7 +21,7 @@ public final class FFMProxy implements InvocationHandler {
     private final SymbolLookup lookup;
     private final Map<Method, MethodHandle> cache;
 
-    FFMProxy(SymbolLookup  lookup) {
+    FFMProxy(SymbolLookup lookup) {
         this.lookup = lookup;
         this.cache = new HashMap<>();
     }

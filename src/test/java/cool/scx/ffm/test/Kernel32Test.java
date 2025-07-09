@@ -18,7 +18,7 @@ public class Kernel32Test {
         if (!OSHelper.isWindows()) {
             return;
         }
-        
+
         var a = KERNEL32.GetStdHandle(-11);
 
         var i = new IntMapper();

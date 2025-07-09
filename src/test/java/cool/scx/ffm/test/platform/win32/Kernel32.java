@@ -11,7 +11,7 @@ import java.lang.foreign.MemorySegment;
 /// @version 0.0.1
 public interface Kernel32 {
 
-    Kernel32 KERNEL32 = ScxFFM.ffmProxy("kernel32",Kernel32.class);
+    Kernel32 KERNEL32 = ScxFFM.ffmProxy("kernel32", Kernel32.class);
 
     // https://learn.microsoft.com/zh-cn/windows/console/getstdhandle
     MemorySegment GetStdHandle(int nStdHandle);
