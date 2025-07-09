@@ -1,4 +1,4 @@
-package cool.scx.ffm.test;
+package cool.scx.ffm.test.platform.c;
 
 import cool.scx.ffm.ScxFFM;
 
