@@ -6,17 +6,13 @@ import java.lang.foreign.SymbolLookup;
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
 import static cool.scx.ffm.FFMHelper.*;
-import static java.lang.foreign.Arena.global;
 import static java.lang.foreign.Linker.nativeLinker;
-import static java.lang.foreign.SymbolLookup.libraryLookup;
 
-/// FFMHelper
+/// FFMProxy
 ///
 /// @author scx567888
 /// @version 0.0.1
@@ -25,34 +21,9 @@ public final class FFMProxy implements InvocationHandler {
     private final SymbolLookup lookup;
     private final Map<Method, MethodHandle> cache;
 
-    private FFMProxy() {
-        this.lookup = nativeLinker().defaultLookup();
+    FFMProxy(SymbolLookup lookup) {
+        this.lookup = lookup;
         this.cache = new HashMap<>();
-    }
-
-    private FFMProxy(String name) {
-        this.lookup = libraryLookup(name, global());
-        this.cache = new HashMap<>();
-    }
-
-    private FFMProxy(Path path) {
-        this.lookup = libraryLookup(path, global());
-        this.cache = new HashMap<>();
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> T ffmProxy(Class<T> clazz) {
-        return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new FFMProxy());
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> T ffmProxy(String name, Class<T> clazz) {
-        return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new FFMProxy(name));
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> T ffmProxy(Path path, Class<T> clazz) {
-        return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new FFMProxy(path));
     }
 
     @Override

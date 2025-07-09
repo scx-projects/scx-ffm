@@ -1,6 +1,8 @@
 package cool.scx.ffm.paramter;
 
 import cool.scx.ffm.callback.Callback;
+import cool.scx.reflect.ClassInfo;
+import cool.scx.reflect.ScxReflect;
 
 import java.lang.foreign.Arena;
 import java.lang.foreign.FunctionDescriptor;
@@ -24,11 +26,13 @@ public class CallbackParameter implements Parameter {
 
     public CallbackParameter(Callback callback) throws NoSuchMethodException, IllegalAccessException {
         this.callback = callback;
+        var classInfo = (ClassInfo) ScxReflect.getType(callback.getClass());
         var callbackMethodName = callback.callbackMethodName();
-        var method = Arrays.stream(callback.getClass().getMethods())
-                .filter(m -> m.getName().equals(callbackMethodName))
+        var methodInfo = Arrays.stream(classInfo.methods())
+                .filter(m -> m.name().equals(callbackMethodName))
                 .findFirst().orElseThrow(() -> new NoSuchMethodException(callbackMethodName));
-        method.setAccessible(true);// 有时我们会遇到 callback 是一个 lambda 表达式的情况 这时需要 强制设置访问权限
+        methodInfo.setAccessible(true);// 有时我们会遇到 callback 是一个 lambda 表达式的情况 这时需要 强制设置访问权限
+        var method = methodInfo.rawMethod();
         this.fun = lookup().unreflect(method).bindTo(callback);
         var r = getMemoryLayout(method.getReturnType());
         var p = getMemoryLayouts(method.getParameterTypes());

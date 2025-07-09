@@ -1,6 +1,6 @@
-package cool.scx.ffm.test;
+package cool.scx.ffm.test.platform.c;
 
-import cool.scx.ffm.FFMProxy;
+import cool.scx.ffm.ScxFFM;
 
 /// 提供一些 C 标准的接口
 ///
@@ -8,7 +8,7 @@ import cool.scx.ffm.FFMProxy;
 /// @version 0.0.1
 public interface C {
 
-    C C = FFMProxy.ffmProxy(C.class);
+    C C = ScxFFM.ffmProxy(C.class);
 
     long strlen(String str);
 
