@@ -1,4 +1,6 @@
-package cool.scx.ffm.mapper;
+package cool.scx.ffm.mapper.primitive;
+
+import cool.scx.ffm.mapper.Mapper;
 
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
@@ -35,9 +37,8 @@ public class FloatMapper implements Mapper {
     }
 
     @Override
-    public Object fromMemorySegment(MemorySegment memorySegment) {
+    public void fromMemorySegment(MemorySegment memorySegment) {
         this.value = memorySegment.get(JAVA_FLOAT, 0);
-        return value;
     }
 
 }
