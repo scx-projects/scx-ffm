@@ -1,4 +1,4 @@
-package cool.scx.ffm.struct;
+package cool.scx.ffm.type;
 
 /// 结构数据需要继承此接口 以便在处理时按照结构数据的方式来处理
 ///
