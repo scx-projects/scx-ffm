@@ -32,7 +32,7 @@ public class StringMapper implements Mapper {
 
     @Override
     public void fromMemorySegment(MemorySegment memorySegment) {
-        
+
     }
 
 }
