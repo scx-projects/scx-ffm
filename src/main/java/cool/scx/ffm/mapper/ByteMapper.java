@@ -1,6 +1,4 @@
-package cool.scx.ffm.mapper.primitive;
-
-import cool.scx.ffm.mapper.Mapper;
+package cool.scx.ffm.mapper;
 
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;

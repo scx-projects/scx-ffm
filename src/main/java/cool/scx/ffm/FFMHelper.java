@@ -1,10 +1,6 @@
 package cool.scx.ffm;
 
-import cool.scx.ffm.mapper.CallbackMapper;
-import cool.scx.ffm.mapper.Mapper;
-import cool.scx.ffm.mapper.StringMapper;
-import cool.scx.ffm.mapper.StructMapper;
-import cool.scx.ffm.mapper.array.*;
+import cool.scx.ffm.mapper.*;
 import cool.scx.ffm.type.Callback;
 import cool.scx.ffm.type.Struct;
 

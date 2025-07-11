@@ -1,40 +1,38 @@
-package cool.scx.ffm.mapper.array;
-
-import cool.scx.ffm.mapper.Mapper;
+package cool.scx.ffm.mapper;
 
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
 
-import static java.lang.foreign.ValueLayout.JAVA_FLOAT;
+import static java.lang.foreign.ValueLayout.JAVA_SHORT;
 
-/// FloatArrayMapper
+/// ShortArrayMapper
 ///
 /// @author scx567888
 /// @version 0.0.1
-public class FloatArrayMapper implements Mapper {
+public class ShortArrayMapper implements Mapper {
 
-    private float[] value;
+    private short[] value;
 
-    public FloatArrayMapper(float[] value) {
+    public ShortArrayMapper(short[] value) {
         this.value = value;
     }
 
-    public float[] getValue() {
+    public short[] getValue() {
         return value;
     }
 
-    public void setValue(float[] value) {
+    public void setValue(short[] value) {
         this.value = value;
     }
 
     @Override
     public MemorySegment toMemorySegment(Arena arena) {
-        return arena.allocateFrom(JAVA_FLOAT, value);
+        return arena.allocateFrom(JAVA_SHORT, value);
     }
 
     @Override
     public void fromMemorySegment(MemorySegment memorySegment) {
-        var temp = memorySegment.toArray(JAVA_FLOAT);
+        var temp = memorySegment.toArray(JAVA_SHORT);
         // 原因参考 IntArrayMapper
         System.arraycopy(temp, 0, value, 0, temp.length);
     }
