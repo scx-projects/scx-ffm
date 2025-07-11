@@ -1,10 +1,12 @@
 package cool.scx.ffm;
 
-import cool.scx.ffm.callback.Callback;
-import cool.scx.ffm.mapper.*;
-import cool.scx.ffm.paramter.*;
-import cool.scx.ffm.struct.Struct;
-import cool.scx.ffm.wrapper.*;
+import cool.scx.ffm.mapper.CallbackMapper;
+import cool.scx.ffm.mapper.Mapper;
+import cool.scx.ffm.mapper.StringMapper;
+import cool.scx.ffm.mapper.StructMapper;
+import cool.scx.ffm.mapper.array.*;
+import cool.scx.ffm.type.Callback;
+import cool.scx.ffm.type.Struct;
 
 import java.lang.foreign.MemoryLayout;
 import java.lang.foreign.MemorySegment;
@@ -46,34 +48,6 @@ public final class FFMHelper {
         if (type == MemorySegment.class) {
             return ADDRESS;
         }
-        //2, 处理基本类型的简单包装类型
-        if (ByteWrapper.class.isAssignableFrom(type)) {
-            return JAVA_BYTE;
-        }
-        if (BooleanWrapper.class.isAssignableFrom(type)) {
-            return JAVA_BOOLEAN;
-        }
-        if (CharWrapper.class.isAssignableFrom(type)) {
-            return JAVA_CHAR;
-        }
-        if (ShortWrapper.class.isAssignableFrom(type)) {
-            return JAVA_SHORT;
-        }
-        if (IntWrapper.class.isAssignableFrom(type)) {
-            return JAVA_INT;
-        }
-        if (LongWrapper.class.isAssignableFrom(type)) {
-            return JAVA_LONG;
-        }
-        if (FloatWrapper.class.isAssignableFrom(type)) {
-            return JAVA_FLOAT;
-        }
-        if (DoubleWrapper.class.isAssignableFrom(type)) {
-            return JAVA_DOUBLE;
-        }
-        if (AddressWrapper.class.isAssignableFrom(type)) {
-            return ADDRESS;
-        }
         //3, 处理字符串
         if (String.class == type) {
             return ADDRESS;
@@ -94,10 +68,6 @@ public final class FFMHelper {
         if (type.isArray() && type.getComponentType().isPrimitive()) {
             return ADDRESS;
         }
-        //8, Parameter 类型 这里一定要放在最后 因为其子类 Wrapper 需要单独处理
-        if (Parameter.class.isAssignableFrom(type)) {
-            return ADDRESS;
-        }
         throw new IllegalArgumentException("不支持的参数类型 !!! " + type);
     }
 
@@ -109,49 +79,45 @@ public final class FFMHelper {
         return memoryLayouts;
     }
 
-    public static Parameter convertToParameter(Object o) throws NoSuchMethodException, IllegalAccessException {
+    public static Object convertToParameter(Object o) throws NoSuchMethodException, IllegalAccessException {
         return switch (o) {
             //0, 空值
-            case null -> new RawValueParameter(MemorySegment.NULL);
-            //1, 基本值
+            case null -> MemorySegment.NULL;
+            //1, 基本值/MemorySegment (FFM 能够直接处理, 无需转换)
             case Byte _,
-                 Boolean _,
-                 Character _,
                  Short _,
                  Integer _,
                  Long _,
                  Float _,
                  Double _,
-                 MemorySegment _ -> new RawValueParameter(o);
-            //2, 基本值包装值
-            case Wrapper<?> w -> w;
+                 Boolean _,
+                 Character _,
+                 MemorySegment _ -> o;
             //3, 字符串
-            case String s -> new StringParameter(s);
+            case String s -> new StringMapper(s);
             //4, 映射类型
-            case Mapper m -> new MapperParameter(m);
+            case Mapper m -> m;
             //5, 结构体
-            case Struct c -> new StructParameter(c);
+            case Struct c -> new StructMapper(c);
             //6, Callback 类型
-            case Callback c -> new CallbackParameter(c);
+            case Callback c -> new CallbackMapper(c);
             //7, 数组类型
-            case byte[] c -> new ArrayParameter(c, new ByteArrayMapper(c));
-            case char[] c -> new ArrayParameter(c, new CharArrayMapper(c));
-            case short[] c -> new ArrayParameter(c, new ShortArrayMapper(c));
-            case int[] c -> new ArrayParameter(c, new IntArrayMapper(c));
-            case long[] c -> new ArrayParameter(c, new LongArrayMapper(c));
-            case float[] c -> new ArrayParameter(c, new FloatArrayMapper(c));
-            case double[] c -> new ArrayParameter(c, new DoubleArrayMapper(c));
-            //8, Parameter 类型
-            case Parameter r -> r;
+            case byte[] c -> new ByteArrayMapper(c);
+            case char[] c -> new CharArrayMapper(c);
+            case short[] c -> new ShortArrayMapper(c);
+            case int[] c -> new IntArrayMapper(c);
+            case long[] c -> new LongArrayMapper(c);
+            case float[] c -> new FloatArrayMapper(c);
+            case double[] c -> new DoubleArrayMapper(c);
             default -> throw new RuntimeException("无法转换的类型 !!! " + o.getClass());
         };
     }
 
-    public static Parameter[] convertToParameters(Object[] objs) throws NoSuchMethodException, IllegalAccessException {
+    public static Object[] convertToParameters(Object[] objs) throws NoSuchMethodException, IllegalAccessException {
         if (objs == null) {
-            return new Parameter[0];
+            return new Object[0];
         }
-        var result = new Parameter[objs.length];
+        var result = new Object[objs.length];
         for (var i = 0; i < objs.length; i = i + 1) {
             result[i] = convertToParameter(objs[i]);
         }

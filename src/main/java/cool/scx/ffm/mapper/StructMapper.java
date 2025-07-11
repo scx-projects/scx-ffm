@@ -1,6 +1,6 @@
-package cool.scx.ffm.paramter;
+package cool.scx.ffm.mapper;
 
-import cool.scx.ffm.struct.Struct;
+import cool.scx.ffm.type.Struct;
 import cool.scx.reflect.AccessModifier;
 import cool.scx.reflect.ClassInfo;
 import cool.scx.reflect.FieldInfo;
@@ -23,14 +23,13 @@ import static cool.scx.ffm.FFMHelper.getMemoryLayout;
 ///
 /// @author scx567888
 /// @version 0.0.1
-public class StructParameter implements Parameter {
+public class StructMapper implements Mapper {
 
     private final Object value;
     private final Map<FieldInfo, VarHandle> fieldMap;
     private final StructLayout LAYOUT;
-    private MemorySegment memorySegment;
 
-    public StructParameter(Struct value) {
+    public StructMapper(Struct value) {
         this.value = value;
         var classInfo = (ClassInfo) ScxReflect.getType(this.value.getClass());
         this.fieldMap = new HashMap<>();
@@ -56,12 +55,12 @@ public class StructParameter implements Parameter {
     }
 
     @Override
-    public Object toNativeParameter(Arena arena) {
-        return this.memorySegment = arena.allocate(LAYOUT);
+    public MemorySegment toMemorySegment(Arena arena) {
+        return arena.allocate(LAYOUT);
     }
 
     @Override
-    public void beforeCloseArena() {
+    public void fromMemorySegment(MemorySegment memorySegment) {
         for (var e : fieldMap.entrySet()) {
             var k = e.getKey();
             var v = e.getValue();

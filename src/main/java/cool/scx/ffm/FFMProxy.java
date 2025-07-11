@@ -1,7 +1,10 @@
 package cool.scx.ffm;
 
+import cool.scx.ffm.mapper.Mapper;
+
 import java.lang.foreign.Arena;
 import java.lang.foreign.FunctionDescriptor;
+import java.lang.foreign.MemorySegment;
 import java.lang.foreign.SymbolLookup;
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.InvocationHandler;
@@ -38,21 +41,31 @@ public final class FFMProxy implements InvocationHandler {
 
         try (var arena = Arena.ofConfined()) {
 
-            //1, 将参数全部转换为 parameters 对象
+            //1, 将参数全部转换为 基本类型 | MemorySegment | Mapper
             var parameters = convertToParameters(args);
 
-            //2, 将 parameters 转换为 nativeParameters
-            var nativeParameters = new Object[parameters.length];
+            //2, 将 parameters 转换为 nativeParameters 基本类型 | MemorySegment
+            var nativeParameters = new Object[args.length];
             for (var i = 0; i < parameters.length; i = i + 1) {
-                nativeParameters[i] = parameters[i].toNativeParameter(arena);
+                var parameter = parameters[i];
+                if (parameter instanceof Mapper mapper) {
+                    nativeParameters[i] = mapper.toMemorySegment(arena);
+                } else {
+                    //能够直接使用的 保留原始值
+                    nativeParameters[i] = parameter;
+                }
             }
 
             //3, 执行方法
             var result = methodHandle.invokeWithArguments(nativeParameters);
 
-            //4, 针对 ref 进行特殊处理
-            for (var parameter : parameters) {
-                parameter.beforeCloseArena();
+            //4, Mapper 类型的参数 数据回写
+            for (int i = 0; i < parameters.length; i = i + 1) {
+                var parameter = parameters[i];
+                var nativeParameter = nativeParameters[i];
+                if (parameter instanceof Mapper mapper && nativeParameter instanceof MemorySegment memorySegment) {
+                    mapper.fromMemorySegment(memorySegment);
+                }
             }
 
             //5, 返回结果
