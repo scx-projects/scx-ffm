@@ -31,9 +31,10 @@ public class CharArrayMapper implements Mapper {
     }
 
     @Override
-    public Object fromMemorySegment(MemorySegment memorySegment) {
-        value = memorySegment.toArray(JAVA_CHAR);
-        return value;
+    public void fromMemorySegment(MemorySegment memorySegment) {
+        var temp = memorySegment.toArray(JAVA_CHAR);
+        // 原因参考 IntArrayMapper
+        System.arraycopy(temp, 0, value, 0, temp.length);
     }
 
 }

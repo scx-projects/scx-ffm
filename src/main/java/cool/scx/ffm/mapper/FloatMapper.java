@@ -35,9 +35,8 @@ public class FloatMapper implements Mapper {
     }
 
     @Override
-    public Object fromMemorySegment(MemorySegment memorySegment) {
+    public void fromMemorySegment(MemorySegment memorySegment) {
         this.value = memorySegment.get(JAVA_FLOAT, 0);
-        return value;
     }
 
 }

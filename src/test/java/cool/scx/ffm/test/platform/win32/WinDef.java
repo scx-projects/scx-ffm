@@ -1,7 +1,6 @@
 package cool.scx.ffm.test.platform.win32;
 
-
-import cool.scx.ffm.struct.Struct;
+import cool.scx.ffm.type.Struct;
 
 public final class WinDef {
 

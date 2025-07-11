@@ -1,11 +1,12 @@
-package cool.scx.ffm.paramter;
+package cool.scx.ffm.mapper;
 
-import cool.scx.ffm.callback.Callback;
+import cool.scx.ffm.type.Callback;
 import cool.scx.reflect.ClassInfo;
 import cool.scx.reflect.ScxReflect;
 
 import java.lang.foreign.Arena;
 import java.lang.foreign.FunctionDescriptor;
+import java.lang.foreign.MemorySegment;
 import java.lang.invoke.MethodHandle;
 import java.util.Arrays;
 
@@ -14,17 +15,17 @@ import static cool.scx.ffm.FFMHelper.getMemoryLayouts;
 import static java.lang.foreign.Linker.nativeLinker;
 import static java.lang.invoke.MethodHandles.lookup;
 
-/// CallbackParameter
+/// CallbackMapper
 ///
 /// @author scx567888
 /// @version 0.0.1
-public class CallbackParameter implements Parameter {
+public class CallbackMapper implements Mapper {
 
     private final Callback callback;
     private final MethodHandle fun;
     private final FunctionDescriptor functionDescriptor;
 
-    public CallbackParameter(Callback callback) throws NoSuchMethodException, IllegalAccessException {
+    public CallbackMapper(Callback callback) throws NoSuchMethodException, IllegalAccessException {
         this.callback = callback;
         var classInfo = (ClassInfo) ScxReflect.getType(callback.getClass());
         var callbackMethodName = callback.callbackMethodName();
@@ -40,8 +41,13 @@ public class CallbackParameter implements Parameter {
     }
 
     @Override
-    public Object toNativeParameter(Arena arena) {
+    public MemorySegment toMemorySegment(Arena arena) {
         return nativeLinker().upcallStub(fun, functionDescriptor, arena);
+    }
+
+    @Override
+    public void fromMemorySegment(MemorySegment memorySegment) {
+
     }
 
 }
