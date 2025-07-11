@@ -1,4 +1,6 @@
-package cool.scx.ffm.mapper;
+package cool.scx.ffm.mapper.array;
+
+import cool.scx.ffm.mapper.Mapper;
 
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
@@ -31,9 +33,10 @@ public class ShortArrayMapper implements Mapper {
     }
 
     @Override
-    public Object fromMemorySegment(MemorySegment memorySegment) {
-        value = memorySegment.toArray(JAVA_SHORT);
-        return value;
+    public void fromMemorySegment(MemorySegment memorySegment) {
+        var temp = memorySegment.toArray(JAVA_SHORT);
+        // 原因参考 IntArrayMapper
+        System.arraycopy(temp, 0, value, 0, temp.length);
     }
 
 }
