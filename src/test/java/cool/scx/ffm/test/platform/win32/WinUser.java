@@ -1,7 +1,7 @@
 package cool.scx.ffm.test.platform.win32;
 
-import cool.scx.ffm.callback.Callback;
-import cool.scx.ffm.struct.Struct;
+import cool.scx.ffm.type.Callback;
+import cool.scx.ffm.type.Struct;
 
 import java.lang.foreign.MemorySegment;
 
