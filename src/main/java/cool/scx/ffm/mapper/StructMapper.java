@@ -31,7 +31,7 @@ public class StructMapper implements Mapper {
 
     public StructMapper(Struct value) {
         this.value = value;
-        var classInfo = (ClassInfo) ScxReflect.getType(this.value.getClass());
+        var classInfo = (ClassInfo) ScxReflect.typeOf(this.value.getClass());
         this.fieldMap = new HashMap<>();
         //1, 寻找 public 的 fields
         var fields = Arrays.stream(classInfo.allFields()).filter(c -> c.accessModifier() == AccessModifier.PUBLIC && !c.isStatic()).toList();
