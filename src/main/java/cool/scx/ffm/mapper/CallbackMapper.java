@@ -27,7 +27,7 @@ public class CallbackMapper implements Mapper {
 
     public CallbackMapper(Callback callback) throws NoSuchMethodException, IllegalAccessException {
         this.callback = callback;
-        var classInfo = (ClassInfo) ScxReflect.getType(callback.getClass());
+        var classInfo = (ClassInfo) ScxReflect.typeOf(callback.getClass());
         var callbackMethodName = callback.callbackMethodName();
         var methodInfo = Arrays.stream(classInfo.methods())
                 .filter(m -> m.name().equals(callbackMethodName))
