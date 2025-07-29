@@ -75,13 +75,6 @@
             <version>${scx-reflect.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>cool.scx</groupId>
-            <artifactId>scx-common</artifactId>
-            <version>${scx-common.version}</version>
-            <scope>test</scope>
-        </dependency>
-
         <!-- TestNG 测试包 -->
         <dependency>
             <groupId>org.testng</groupId>
@@ -96,7 +89,6 @@
 
         <!-- *********************** 以下为依赖包版本 *********************** -->
         <scx-reflect.version>4.1.0</scx-reflect.version>
-        <scx-common.version>4.0.2</scx-common.version>
         <testng.version>7.10.2</testng.version>
 
     </properties>
