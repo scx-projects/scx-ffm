@@ -1,6 +1,5 @@
 package cool.scx.ffm.test;
 
-import cool.scx.common.os.OSHelper;
 import cool.scx.ffm.mapper.IntMapper;
 import org.testng.annotations.Test;
 
@@ -15,7 +14,7 @@ public class Kernel32Test {
     @Test
     public static void test1() {
         //跳过 linux 上的测试
-        if (!OSHelper.isWindows()) {
+        if (!System.getProperty("os.name").startsWith("Windows")) {
             return;
         }
 

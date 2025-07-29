@@ -1,7 +1,5 @@
 package cool.scx.ffm.test;
 
-
-import cool.scx.common.util.$;
 import cool.scx.ffm.test.platform.win32.WinUser;
 
 import static cool.scx.ffm.test.platform.win32.User32.USER32;
@@ -36,7 +34,11 @@ public class User32Test {
             int x = centerX + (int) (radius * Math.cos(angle));
             int y = centerY + (int) (radius * Math.sin(angle));
             USER32.SetCursorPos(x, y);
-            $.sleep(1);  // 等待1毫秒
+            try {
+                Thread.sleep(1);  // 等待1毫秒
+            } catch (InterruptedException _) {
+
+            }
         }
 
         // 最后确保回到起始点（由于浮点运算可能存在的误差, 这里显式设置）
